@@ -22,13 +22,12 @@ export async function GET(req: Request) {
       if (res.ok) {
         const data = await res.json()
         if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((o: any) => ({
+          const mapped = data.map((o: Record<string, unknown>, i: number) => ({
             id: o.id,
             restaurantId: o.restaurant_id,
-            items: Array.isArray(o.items) ? o.items.map((i: any) => i.name || i).join(', ') : '',
-            address: o.delivery_address || '📍 Nearby drop-off',
-            boxes: Array.isArray(o.items) ? o.items.reduce((s: number, i: any) => s + (i.quantity || 1), 0) : 1,
-            discount: 20,
+            boxes: Array.isArray(o.items) ? (o.items as {quantity?: number}[]).reduce((s, item) => s + (item.quantity || 1), 0) : 1,
+            distance: ['0.4 mi', '0.7 mi', '1.0 mi', '1.3 mi'][i % 4],
+            reward: Number(((o.subtotal as number) || 15) * 0.15),
           }))
           return NextResponse.json(mapped)
         }
