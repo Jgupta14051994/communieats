@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Location permissions -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>CommuniEats uses your location to show nearby restaurants and help you connect with Community Courier opportunities in your area.</string>
+
+    <!-- Camera (for profile photo) -->
+    <key>NSCameraUsageDescription</key>
+    <string>CommuniEats would like to access your camera to update your profile photo.</string>
+
+    <!-- Photo library -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>CommuniEats would like to access your photos to update your profile photo.</string>
+
+    <!-- Push notifications -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
+
+    <!-- App Transport Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>communieats.vercel.app</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <false/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+            </dict>
+        </dict>
+    </dict>
+
+    <!-- URL Scheme for deep linking -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.communieats.app</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>communieats</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>
