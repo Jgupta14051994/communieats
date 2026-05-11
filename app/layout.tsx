@@ -13,6 +13,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://communieats-app.vercel.app'),
   title: 'CommuniEats — Food delivery with a community soul',
   description: 'Order food and earn discounts by being a Community Courier. Pick up your order and deliver a neighbor\'s on the way home.',
   keywords: ['food delivery', 'community', 'courier', 'restaurant', 'order food', 'eco delivery'],
