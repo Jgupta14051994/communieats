@@ -1,4 +1,5 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Truck, PersonStanding, HeartHandshake } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
@@ -13,7 +14,17 @@ const modes = [
 
 export default function FulfillmentPicker({ restaurantId }: { restaurantId: string }) {
   const { fulfillmentMode, neighborOrders, setFulfillmentMode, setNeighborOrders, getDiscountPercent, getDiscount } = useCartStore()
-  const availableNeighborOrders = NEIGHBOR_ORDERS.filter(o => o.restaurantId === restaurantId).slice(0, 3)
+  const [availableNeighborOrders, setAvailableNeighborOrders] = useState(
+    NEIGHBOR_ORDERS.filter(o => o.restaurantId === restaurantId).slice(0, 3)
+  )
+
+  useEffect(() => {
+    if (!restaurantId) return
+    fetch(`/api/community-courier?restaurantId=${restaurantId}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data) && data.length > 0) setAvailableNeighborOrders(data.slice(0, 3)) })
+      .catch(() => {})
+  }, [restaurantId])
 
   return (
     <div className="space-y-3">
@@ -38,7 +49,7 @@ export default function FulfillmentPicker({ restaurantId }: { restaurantId: stri
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-[#1A1A1A] text-sm">{label}</span>
                     {id !== 'delivery' && (
-                      <span className="text-[#06C167] text-xs font-bold">{id === 'pickup' ? '10% OFF' : '20-30% OFF'}</span>
+                      <span className="text-[#06C167] text-xs font-bold">{id === 'pickup' ? '10% OFF' : '20–30% OFF'}</span>
                     )}
                   </div>
                   <p className="text-[#6B6B6B] text-xs mt-0.5">{desc}</p>
@@ -57,7 +68,9 @@ export default function FulfillmentPicker({ restaurantId }: { restaurantId: stri
                 <span className="font-semibold text-[#1A1A1A]">{availableNeighborOrders.length} neighbors</span> have orders ready at this restaurant. Carry 1–2 for extra discounts:
               </p>
               {availableNeighborOrders.map((order, i) => (
-                <NeighborOrderCard key={order.id} order={order} index={i} selected={neighborOrders > i} onToggle={() => setNeighborOrders(neighborOrders > i ? i : i + 1)} />
+                <NeighborOrderCard key={order.id} order={order} index={i}
+                  selected={neighborOrders > i}
+                  onToggle={() => setNeighborOrders(neighborOrders > i ? i : i + 1)} />
               ))}
               {getDiscountPercent() > 0 && (
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
