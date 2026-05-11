@@ -1,8 +1,9 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Star, Clock, MapPin, Flame, Users } from 'lucide-react'
+import { Star, Clock, MapPin, Users } from 'lucide-react'
 import { Restaurant } from '@/lib/mock-data'
+import RealtimeOrderCount from './RealtimeOrderCount'
 
 export default function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   return (
@@ -27,9 +28,7 @@ export default function RestaurantCard({ restaurant }: { restaurant: Restaurant 
             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{restaurant.distance}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1 bg-orange-50 text-orange-700 text-xs font-medium px-2 py-1 rounded-full">
-              <Flame className="w-3 h-3" />{restaurant.orderCount} orders today
-            </span>
+            <RealtimeOrderCount restaurantId={restaurant.id} initialCount={restaurant.orderCount} />
             {restaurant.pendingCourierOrders > 0 && (
               <span className="flex items-center gap-1 bg-blue-50 text-[#00B4D8] text-xs font-medium px-2 py-1 rounded-full">
                 <Users className="w-3 h-3" />{restaurant.pendingCourierOrders} waiting

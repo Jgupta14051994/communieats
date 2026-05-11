@@ -3,16 +3,36 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CreditCard, CheckCircle, Leaf } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
+import { createClient } from '@/lib/supabase/client'
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { getTotal, getDiscount, getDiscountPercent, fulfillmentMode, clearCart } = useCartStore()
+  const { items, getTotal, getSubtotal, getDiscount, getDiscountPercent, fulfillmentMode, clearCart } = useCartStore()
   const [placing, setPlacing] = useState(false)
   const [done, setDone] = useState(false)
 
   const handleOrder = async () => {
     setPlacing(true)
-    await new Promise(r => setTimeout(r, 1800))
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    try {
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id,
+          restaurantId: items[0]?.restaurantId,
+          items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
+          subtotal: getSubtotal(),
+          discount: getDiscount(),
+          fulfillmentMode: fulfillmentMode,
+          deliveryAddress: '123 Main St, NYC',
+        }),
+      })
+    } catch {}
+
+    await new Promise(r => setTimeout(r, 800))
     setDone(true)
     clearCart()
   }

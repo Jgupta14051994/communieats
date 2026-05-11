@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Leaf, Award, TrendingUp, DollarSign, Users } from 'lucide-react'
 import { MOCK_USER, LEADERBOARD } from '@/lib/mock-data'
+import { createClient } from '@/lib/supabase/client'
 
 function AnimatedNumber({ target, decimals = 0 }: { target: number; decimals?: number }) {
   const [value, setValue] = useState(0)
@@ -20,7 +21,35 @@ function AnimatedNumber({ target, decimals = 0 }: { target: number; decimals?: n
 }
 
 export default function ProfilePage() {
-  const user = MOCK_USER
+  const [profile, setProfile] = useState(MOCK_USER)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data.user) {
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single()
+        if (prof) {
+          setProfile({
+            name: prof.name || data.user.email?.split('@')[0] || 'User',
+            email: data.user.email || '',
+            avatar: prof.avatar_url || MOCK_USER.avatar,
+            community_points: prof.community_points || 0,
+            total_co2_saved: prof.total_co2_saved || 0,
+            deliveries_completed: prof.deliveries_completed || 0,
+            discount_earned: 0,
+            tier: prof.community_points > 1000 ? 'Community Hero' : prof.community_points > 500 ? 'Rising Star' : 'New Member',
+            rank: 99,
+          })
+        }
+      }
+    })
+  }, [])
+
+  const user = profile
   const progressToNext = (user.community_points % 500) / 500
   const circumference = 2 * Math.PI * 40
 
