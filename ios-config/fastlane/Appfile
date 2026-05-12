@@ -1,0 +1,4 @@
+app_identifier "com.communieats.app"
+apple_id "YOUR_APPLE_ID@email.com"   # Replace with your Apple ID
+itc_team_id "YOUR_ITC_TEAM_ID"       # App Store Connect Team ID (find at appstoreconnect.apple.com)
+team_id "YOUR_TEAM_ID"               # Developer Portal Team ID

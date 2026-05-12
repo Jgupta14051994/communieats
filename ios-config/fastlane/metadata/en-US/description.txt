@@ -1,0 +1,52 @@
+CommuniEats is the food delivery app that rewards you for being a good neighbor.
+
+Order food from local restaurants and choose how you want it:
+
+🚗 DELIVERY — Standard delivery to your door
+🚶 PICK UP — Go yourself and save 10%
+🌱 COMMUNITY COURIER — Pick up your order AND deliver a neighbor's order on your way home. Earn 20-30% off YOUR meal while helping your community.
+
+HOW COMMUNITY COURIER WORKS:
+1. Add items to your cart from any restaurant
+2. Choose "Community Courier" at checkout
+3. See neighbors who have orders ready at the same restaurant
+4. Accept 1 or 2 neighbor deliveries
+5. Get up to 30% off your own order instantly
+6. Drop off neighbor orders on your way home — they get their food faster, you save money, and everyone reduces delivery vehicle trips
+
+LIVE COMMUNITY MAP:
+- Real-time heat map showing order activity across your neighborhood
+- See which restaurants are trending right now
+- Find community courier opportunities near you
+- Watch order counts update live
+
+DISCOVER RESTAURANTS:
+- Search and filter by cuisine, dietary needs (Vegan, Vegetarian, Halal, Gluten-Free)
+- Sort by Most Popular, Nearest, Top Rated, or Fastest
+- Trending section shows the hottest spots right now
+- Detailed menus with Mains, Appetizers, Desserts, and Drinks
+
+ORDER TRACKING:
+- Animated live status timeline: Confirmed → Preparing → Ready → On the Way → Delivered
+- Real-time ETA countdown
+- Rate your experience with in-app star ratings
+
+SUSTAINABILITY DASHBOARD:
+- Track total CO₂ saved by choosing Community Courier over solo delivery
+- See your lifetime courier deliveries and community impact
+- Earn community points and climb the leaderboard
+- Tier progression: New Member → Rising Star → Community Hero → Legend
+
+SMART CHECKOUT:
+- Promo codes for extra savings
+- Community discount stacks with promo codes
+- Transparent pricing with itemised breakdown
+- Delivery address saved for future orders
+
+ACCOUNT & COMMUNITY:
+- Sign up with email to track your impact
+- Community leaderboard showing top couriers
+- Order history with sustainability metrics
+- In-app notifications for courier opportunities and promos
+
+Join thousands of neighbors making food delivery better for everyone. Download CommuniEats today — eat well, save money, help your community. 🌱

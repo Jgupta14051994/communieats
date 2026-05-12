@@ -5,8 +5,9 @@ const config: CapacitorConfig = {
   appName: 'CommuniEats',
   webDir: 'out',
   server: {
-    url: 'https://communieats.vercel.app',
+    url: 'https://communieats-app.vercel.app',
     cleartext: false,
+    allowNavigation: ['*.vercel.app', '*.supabase.co', '*.unsplash.com'],
   },
   ios: {
     contentInset: 'automatic',
@@ -17,7 +18,7 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchShowDuration: 2500,
       launchAutoHide: true,
       backgroundColor: '#06C167',
       iosSpinnerStyle: 'large',
@@ -31,12 +32,9 @@ const config: CapacitorConfig = {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
     },
-    Geolocation: {
-      permissions: {
-        ios: {
-          NSLocationWhenInUseUsageDescription: 'CommuniEats uses your location to show nearby restaurants and help you deliver orders to neighbors.',
-        },
-      },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#06C167',
     },
   },
 }

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { CreditCard, MapPin, Tag, ChevronRight } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
 import { createClient } from '@/lib/supabase/client'
+import { hapticSuccess, hapticMedium } from '@/lib/native'
 
 const PROMO_CODES: Record<string, number> = {
   'WELCOME10': 10,
@@ -66,6 +67,7 @@ export default function CheckoutPage() {
     } catch {}
 
     await new Promise(r => setTimeout(r, 800))
+    await hapticSuccess()
     clearCart()
     const orderNum = `CE-${Math.floor(Math.random() * 90000 + 10000)}`
     router.push(`/orders/track?id=${orderNum}`)

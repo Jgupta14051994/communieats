@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Star, Clock, MapPin, Flame, ArrowLeft, Plus, Minus, ShoppingCart } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
+import { hapticLight, hapticMedium } from '@/lib/native'
 import type { Restaurant, MenuItem } from '@/lib/mock-data'
 
 export default function RestaurantPage({ params }: { params: Promise<{ id: string }> }) {
@@ -123,24 +124,18 @@ export default function RestaurantPage({ params }: { params: Promise<{ id: strin
                   <span className="font-bold text-[#1A1A1A]">${Number(item.price).toFixed(2)}</span>
                   {qty === 0 ? (
                     <button
-                      onClick={() => addItem({
-                        id: item.id,
-                        name: item.name,
-                        price: Number(item.price),
-                        restaurantId: restaurant.id,
-                        restaurantName: restaurant.name,
-                      })}
+                      onClick={() => { hapticLight(); addItem({ id: item.id, name: item.name, price: Number(item.price), restaurantId: restaurant.id, restaurantName: restaurant.name }) }}
                       className="bg-[#06C167] text-white rounded-full p-1.5 hover:bg-[#049652] transition-colors">
                       <Plus className="w-4 h-4" />
                     </button>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <button onClick={() => updateQuantity(item.id, qty - 1)}
+                      <button onClick={() => { hapticLight(); updateQuantity(item.id, qty - 1) }}
                         className="bg-gray-100 rounded-full p-1.5 hover:bg-gray-200 transition-colors">
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="font-semibold text-[#1A1A1A] w-4 text-center text-sm">{qty}</span>
-                      <button onClick={() => updateQuantity(item.id, qty + 1)}
+                      <button onClick={() => { hapticLight(); updateQuantity(item.id, qty + 1) }}
                         className="bg-[#06C167] text-white rounded-full p-1.5 hover:bg-[#049652] transition-colors">
                         <Plus className="w-4 h-4" />
                       </button>

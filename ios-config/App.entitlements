@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Push Notifications -->
+    <key>aps-environment</key>
+    <string>production</string>
+
+    <!-- Associated Domains for deep links and universal links -->
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:communieats-app.vercel.app</string>
+        <string>webcredentials:communieats-app.vercel.app</string>
+    </array>
+
+    <!-- Sign in with Apple (optional but recommended) -->
+    <key>com.apple.developer.applesignin</key>
+    <array>
+        <string>Default</string>
+    </array>
+</dict>
+</plist>

@@ -1,0 +1,72 @@
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Run tests"
+  lane :test do
+    run_tests(scheme: "App")
+  end
+
+  desc "Build and push to TestFlight"
+  lane :beta do
+    # Increment build number
+    increment_build_number(xcodeproj: "ios/App/App.xcodeproj")
+
+    # Match certificates (code signing)
+    match(type: "appstore", readonly: is_ci)
+
+    # Build
+    build_app(
+      scheme: "App",
+      workspace: "ios/App/App.xcworkspace",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "CommuniEats.ipa",
+      export_options: {
+        uploadBitcode: false,
+        compileBitcode: false,
+        uploadSymbols: true,
+      }
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: "Latest CommuniEats update with community courier improvements"
+    )
+  end
+
+  desc "Release to App Store"
+  lane :release do
+    increment_build_number(xcodeproj: "ios/App/App.xcodeproj")
+    match(type: "appstore", readonly: is_ci)
+    build_app(
+      scheme: "App",
+      workspace: "ios/App/App.xcworkspace",
+      export_method: "app-store"
+    )
+    upload_to_app_store(
+      skip_metadata: false,
+      skip_screenshots: false,
+      submit_for_review: true,
+      automatic_release: false,
+      force: true,
+      metadata_path: "./ios-config/fastlane/metadata"
+    )
+  end
+
+  desc "Take App Store screenshots"
+  lane :screenshots do
+    capture_ios_simulator_screenshots(
+      workspace: "ios/App/App.xcworkspace",
+      scheme: "App",
+      output_directory: "./ios-config/screenshots",
+      devices: [
+        "iPhone 15 Pro Max",
+        "iPhone 8 Plus",
+        "iPad Pro (12.9-inch) (6th generation)"
+      ]
+    )
+  end
+
+end

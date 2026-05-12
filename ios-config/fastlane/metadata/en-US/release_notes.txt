@@ -1,0 +1,9 @@
+Welcome to CommuniEats 1.0!
+
+• Browse 12+ local restaurants on a live community map
+• Choose Delivery, Pick Up (save 10%), or Community Courier (save up to 30%)
+• Community Courier: pick up your order + carry a neighbor's order home
+• Real-time order count badges and live restaurant activity map
+• Track orders with animated live status timeline
+• Community leaderboard and sustainability dashboard
+• Earn CO₂ savings and community points with every courier delivery

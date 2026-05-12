@@ -1,9 +1,10 @@
 'use client'
 import { useState, useMemo, useEffect } from 'react'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { Search, SlidersHorizontal, X, Navigation } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import RestaurantCard from '@/components/RestaurantCard'
 import { RESTAURANTS as MOCK_RESTAURANTS } from '@/lib/mock-data'
+import { getCurrentPosition } from '@/lib/native'
 import type { Restaurant } from '@/lib/mock-data'
 
 type SortMode = 'popular' | 'nearest' | 'rating' | 'fastest'
@@ -25,6 +26,14 @@ const DIETARY_CUISINES: Record<DietaryFilter, string[]> = {
   'Gluten-Free': ['Japanese', 'Korean', 'Vietnamese', 'Mexican'],
 }
 
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 6371
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLng = (lng2 - lng1) * Math.PI / 180
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2)**2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+}
+
 export default function HomePage() {
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState<SortMode>('popular')
@@ -32,6 +41,7 @@ export default function HomePage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>(MOCK_RESTAURANTS)
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
+  const [userPos, setUserPos] = useState<{lat: number; lng: number} | null>(null)
 
   useEffect(() => {
     fetch('/api/restaurants')
@@ -39,6 +49,7 @@ export default function HomePage() {
       .then(data => { if (Array.isArray(data) && data.length > 0) setRestaurants(data) })
       .catch(() => {})
       .finally(() => setLoading(false))
+    getCurrentPosition().then(pos => { if (pos) setUserPos(pos) })
   }, [])
 
   const toggleDietary = (f: DietaryFilter) =>
@@ -55,7 +66,13 @@ export default function HomePage() {
       list = list.filter(r => allowedCuisines.has(r.cuisine))
     }
     if (sort === 'popular') list.sort((a, b) => b.orderCount - a.orderCount)
-    if (sort === 'nearest') list.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+    if (sort === 'nearest') {
+      if (userPos) {
+        list.sort((a, b) => haversineKm(userPos.lat, userPos.lng, a.lat, a.lng) - haversineKm(userPos.lat, userPos.lng, b.lat, b.lng))
+      } else {
+        list.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+      }
+    }
     if (sort === 'rating') list.sort((a, b) => b.rating - a.rating)
     if (sort === 'fastest') list.sort((a, b) => a.deliveryTime - b.deliveryTime)
     return list
