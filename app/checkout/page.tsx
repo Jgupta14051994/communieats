@@ -148,7 +148,7 @@ export default function CheckoutPage() {
     if (items.length === 0) router.replace('/')
   }, [items.length, router])
 
-  const deliveryFee = fulfillmentMode === 'delivery' ? 2.99 : 0
+  const deliveryFee = fulfillmentMode === 'delivery' ? 6.99 : 0
   const subtotal = getSubtotal()
   const communityDiscount = getDiscount()
   const promoAmount = promoApplied ? subtotal * (promoDiscount / 100) : 0

@@ -53,10 +53,10 @@ export default function CartPage() {
             <span>-${getDiscount().toFixed(2)}</span>
           </div>
         )}
-        <div className="flex justify-between text-sm"><span className="text-[#6B6B6B]">Delivery fee</span><span className="font-medium">{fulfillmentMode === 'delivery' ? '$2.99' : 'Free'}</span></div>
+        <div className="flex justify-between text-sm"><span className="text-[#6B6B6B]">Delivery fee</span><span className="font-medium">{fulfillmentMode === 'delivery' ? '$6.99' : 'Free'}</span></div>
         <div className="border-t pt-2 flex justify-between font-bold text-[#1A1A1A]">
           <span>Total</span>
-          <span>${(getTotal() + (fulfillmentMode === 'delivery' ? 2.99 : 0)).toFixed(2)}</span>
+          <span>${(getTotal() + (fulfillmentMode === 'delivery' ? 6.99 : 0)).toFixed(2)}</span>
         </div>
       </div>
 

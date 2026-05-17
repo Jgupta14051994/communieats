@@ -7,13 +7,34 @@ import { NEIGHBOR_ORDERS } from '@/lib/mock-data'
 import NeighborOrderCard from './NeighborOrderCard'
 
 const modes = [
-  { id: 'delivery' as const, icon: Truck, label: 'Delivery', desc: 'Delivered to your door', color: '#6B6B6B' },
-  { id: 'pickup' as const, icon: PersonStanding, label: 'Pick Up', desc: 'Save 10% by going yourself', color: '#06C167' },
-  { id: 'community_courier' as const, icon: HeartHandshake, label: 'Community Courier', desc: "Pick up + deliver a neighbor's order", color: '#06C167' },
+  {
+    id: 'delivery' as const,
+    icon: Truck,
+    label: 'Delivery',
+    desc: 'Delivered straight to your door',
+    fee: '$6.99',
+    badge: null,
+  },
+  {
+    id: 'pickup' as const,
+    icon: PersonStanding,
+    label: 'Pick Up',
+    desc: 'Pick up yourself — no delivery fee',
+    fee: 'Free',
+    badge: null,
+  },
+  {
+    id: 'community_courier' as const,
+    icon: HeartHandshake,
+    label: 'Pickup + Neighbours',
+    desc: "Pick up your order & a neighbour's — earn 20% off",
+    fee: 'Free',
+    badge: '20% OFF',
+  },
 ]
 
 export default function FulfillmentPicker({ restaurantId }: { restaurantId: string }) {
-  const { fulfillmentMode, neighborOrders, setFulfillmentMode, setNeighborOrders, getDiscountPercent, getDiscount } = useCartStore()
+  const { fulfillmentMode, neighborOrders, setFulfillmentMode, setNeighborOrders, getDiscount } = useCartStore()
   const [availableNeighborOrders, setAvailableNeighborOrders] = useState(
     NEIGHBOR_ORDERS.filter(o => o.restaurantId === restaurantId).slice(0, 3)
   )
@@ -30,7 +51,7 @@ export default function FulfillmentPicker({ restaurantId }: { restaurantId: stri
     <div className="space-y-3">
       <h3 className="font-semibold text-[#1A1A1A] text-base">How do you want your order?</h3>
       <div className="grid grid-cols-1 gap-2">
-        {modes.map(({ id, icon: Icon, label, desc }) => {
+        {modes.map(({ id, icon: Icon, label, desc, fee, badge }) => {
           const selected = fulfillmentMode === id
           return (
             <motion.button key={id} onClick={() => setFulfillmentMode(id)} whileTap={{ scale: 0.98 }}
@@ -48,9 +69,12 @@ export default function FulfillmentPicker({ restaurantId }: { restaurantId: stri
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-[#1A1A1A] text-sm">{label}</span>
-                    {id !== 'delivery' && (
-                      <span className="text-[#06C167] text-xs font-bold">{id === 'pickup' ? '10% OFF' : '20–30% OFF'}</span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {badge && (
+                        <span className="bg-green-100 text-[#06C167] text-xs font-bold px-2 py-0.5 rounded-full">{badge}</span>
+                      )}
+                      <span className={`text-xs font-semibold ${id === 'delivery' ? 'text-[#6B6B6B]' : 'text-[#06C167]'}`}>{fee}</span>
+                    </div>
                   </div>
                   <p className="text-[#6B6B6B] text-xs mt-0.5">{desc}</p>
                 </div>
@@ -65,20 +89,18 @@ export default function FulfillmentPicker({ restaurantId }: { restaurantId: stri
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
             <div className="pt-2 space-y-3">
               <p className="text-sm text-[#6B6B6B]">
-                <span className="font-semibold text-[#1A1A1A]">{availableNeighborOrders.length} neighbors</span> have orders ready at this restaurant. Carry 1–2 for extra discounts:
+                <span className="font-semibold text-[#1A1A1A]">{availableNeighborOrders.length} neighbour{availableNeighborOrders.length !== 1 ? 's' : ''}</span> near you have orders ready at this restaurant:
               </p>
               {availableNeighborOrders.map((order, i) => (
                 <NeighborOrderCard key={order.id} order={order} index={i}
                   selected={neighborOrders > i}
                   onToggle={() => setNeighborOrders(neighborOrders > i ? i : i + 1)} />
               ))}
-              {getDiscountPercent() > 0 && (
-                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                  className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                  <p className="text-[#06C167] font-bold text-xl">You&apos;ll save ${getDiscount().toFixed(2)}</p>
-                  <p className="text-[#6B6B6B] text-sm mt-1">{getDiscountPercent()}% community courier discount applied</p>
-                </motion.div>
-              )}
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+                <p className="text-[#06C167] font-bold text-xl">You&apos;ll save ${getDiscount().toFixed(2)}</p>
+                <p className="text-[#6B6B6B] text-sm mt-1">20% community discount applied 🎉</p>
+              </motion.div>
             </div>
           </motion.div>
         )}

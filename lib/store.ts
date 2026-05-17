@@ -48,9 +48,8 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => set({ items: [], neighborOrders: 0, fulfillmentMode: 'delivery' }),
       getSubtotal: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
       getDiscountPercent: () => {
-        const { fulfillmentMode, neighborOrders } = get()
-        if (fulfillmentMode === 'pickup') return 10
-        if (fulfillmentMode === 'community_courier') return neighborOrders === 2 ? 30 : neighborOrders === 1 ? 20 : 10
+        const { fulfillmentMode } = get()
+        if (fulfillmentMode === 'community_courier') return 20
         return 0
       },
       getDiscount: () => {
